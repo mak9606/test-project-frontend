@@ -1,6 +1,7 @@
 import { styled } from "@mui/system";
 import { Container, Avatar, Typography } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+
 import SignInForm from "../components/SignInForm";
 
 const ContainerWrapper = styled(Container)(({ theme }) => ({
@@ -19,7 +20,7 @@ const TitleWrapper = styled(Typography)(({ theme }) => ({
   margin: theme.spacing(2),
 }));
 
-const Login = () => {
+const SignIn = () => {
   return (
     <ContainerWrapper component="main" maxWidth="xs">
       <div>
@@ -35,4 +36,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignIn;

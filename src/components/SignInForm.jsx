@@ -2,10 +2,13 @@ import React from "react";
 import { TextField, Button, Grid } from "@mui/material";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { styled } from "@mui/system";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import * as Yup from "yup";
 import ROUTES from "../settings/Routes";
+import { login } from "../api/public/users";
+import { toast } from "react-toastify";
+import { useAuth } from "../context/auth.context";
 
 const FormWrapper = styled(Form)(({ theme }) => ({
   width: "100%",
@@ -27,14 +30,29 @@ const useStyles = {
 };
 
 const SignInForm = () => {
+  const navigate = useNavigate();
+  const { loginUser } = useAuth();
+
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string().required("Password is required"),
   });
-  const handleFormSubmit = (values) => {
-    // Implement your login/signup logic here
-    console.log(values);
+
+  const handleFormSubmit = async (values) => {
+    const response = await login(values.email, values.password);
+    if (response.status === 201) {
+      toast.success("Logged in successfully");
+      loginUser();
+      navigate(ROUTES.HOME);
+    } else {
+      if (response.statusCode === 400) {
+        toast.error(response.message);
+      } else {
+        toast.error("Sign Up Failed");
+      }
+    }
   };
+
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
